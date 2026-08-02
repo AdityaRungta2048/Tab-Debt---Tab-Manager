@@ -28,9 +28,12 @@ export function createMockChrome(size = 400, seed = 42) {
   let nextGroupId = 1000;
   const store = new Map<string, unknown>();
   const groups = new Map<number, { id: number; title: string; color: string; windowId: number }>();
+  // Mirrors Chrome's real root layout: "0" is the tree root, "1" is the bookmarks bar and
+  // "2" is "Other bookmarks", which is where Tab Debt puts its folder.
   const bookmarks: { id: string; parentId?: string; title: string; url?: string }[] = [
     { id: '0', title: '' },
     { id: '1', parentId: '0', title: 'Bookmarks bar' },
+    { id: '2', parentId: '0', title: 'Other bookmarks' },
   ];
   let nextBmId = 100;
   const alarms = new Map<string, { name: string; periodInMinutes?: number }>();
@@ -225,7 +228,15 @@ export function createMockChrome(size = 400, seed = 42) {
       },
       search: async (q: { title?: string }): Promise<unknown[]> =>
         bookmarks.filter((b) => !q.title || b.title === q.title),
-      getChildren: async (id: string): Promise<unknown[]> => bookmarks.filter((b) => b.parentId === id),
+      getChildren: async (id: string): Promise<{ id: string; title: string; url?: string }[]> =>
+        bookmarks.filter((b) => b.parentId === id),
+      getTree: async (): Promise<unknown[]> => {
+        const build = (id: string): unknown => ({
+          ...bookmarks.find((b) => b.id === id),
+          children: bookmarks.filter((b) => b.parentId === id).map((c) => build(c.id)),
+        });
+        return [build('0')];
+      },
       __all: (): unknown[] => bookmarks,
     },
 

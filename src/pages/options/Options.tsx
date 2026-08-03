@@ -6,6 +6,7 @@ import { CATEGORIES } from '@/types/tab';
 import type { Settings } from '@/types/storage';
 import { DEFAULT_SETTINGS } from '@/types/storage';
 import { Button } from '@/components/ui/primitives';
+import { MemoryWeightsSection } from '@/components/options/MemoryWeights';
 import { applyTheme } from '@/hooks/useTheme';
 
 /** Settings. The privacy statement lives here in plain language, not in a modal nobody reads. */
@@ -186,48 +187,7 @@ export function Options() {
         />
       </section>
 
-      <section class="mt-6 border-t border-rule pt-4">
-        <h2 class="text-sm font-medium">Size estimates</h2>
-        <p class="mt-1 text-xs text-muted">
-          Chrome does not expose per-tab memory to extensions, so every size in Tab Debt is an
-          estimate from the weights below — a base cost per tab, multiplied for known-heavy sites.
-          It is shown here rather than hidden so you can judge how much to trust it.
-        </p>
-        <div class="mt-2 flex items-center gap-3">
-          <label class="flex items-center gap-1.5 text-xs">
-            Base
-            <input
-              type="number"
-              value={weights.base}
-              onChange={(e) =>
-                void save({ memoryWeights: { ...weights, base: Number((e.target as HTMLInputElement).value) } })
-              }
-              class="num w-20 rounded-sm border border-rule bg-card px-2 py-1"
-            />
-            MB
-          </label>
-          <label class="flex items-center gap-1.5 text-xs">
-            Sleeping
-            <input
-              type="number"
-              value={weights.discarded}
-              onChange={(e) =>
-                void save({ memoryWeights: { ...weights, discarded: Number((e.target as HTMLInputElement).value) } })
-              }
-              class="num w-20 rounded-sm border border-rule bg-card px-2 py-1"
-            />
-            MB
-          </label>
-        </div>
-        <details class="mt-2">
-          <summary class="cursor-pointer text-xs text-ledger">Multipliers for heavy sites</summary>
-          <ul class="num mt-1 space-y-0.5 text-2xs text-muted">
-            {Object.entries(weights.heavy).map(([domain, m]) => (
-              <li key={domain}>{domain} × {m}</li>
-            ))}
-          </ul>
-        </details>
-      </section>
+      <MemoryWeightsSection weights={weights} onChange={(memoryWeights) => void save({ memoryWeights })} />
 
       <section class="mt-6 border-t border-rule pt-4">
         <h2 class="text-sm font-medium">Your data</h2>

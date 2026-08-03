@@ -12,26 +12,16 @@ group, bookmark-and-close, archive, pin, mute) with undo toast and a permanent h
 panel · keyboard-first fuzzy search · popup triage surface · dashboard register · settings ·
 the fixture and mock harness.
 
+## Shipped — Phase 2
+
+Composable filters (nine quick filters plus category and window, ANDing across dimensions
+and ORing within one) with a visible active-filter bar and one-click clear · collapsible
+domain rows with per-domain counts, staleness and bulk actions, composing with the filters ·
+named sessions with save, restore into a new window, rename, delete and JSON export/import,
+warning before restoring a large session · settings completed with an editable heavy-domain
+multiplier table.
+
 ## Not built yet
-
-### Phase 2 — depth
-
-- **Domain grouping** — collapsible per-domain rows with counts, staleness summary and
-  per-domain bulk actions. The data is already computed for the concentration factor; this
-  is a presentation layer over it.
-- **Composable filters** — Today / This week / Stale / Duplicates / Pinned / Audible /
-  Muted / Discarded / Never opened / by Category / by Window, ANDed, with a visible active-
-  filter bar. Currently the register shows everything and search is the only narrowing tool.
-- **Named sessions** — save the current window or a filtered selection, restore into a new
-  window, rename, delete, export/import as JSON, with a warning before restoring a 200-tab
-  session. The storage schema (`td.sessions.v1`) and its Zod validation already exist and
-  are wired into export; no UI reads or writes them yet. That is the one place in the
-  codebase where a shape exists ahead of its feature, and it is deliberate — the schema
-  needed to be in the versioned migration path from day one.
-- **Recategorise from the register** — overrides can be added and edited in Settings (they
-  are tier 1 of the classifier, so they belong in Phase 1), but the natural place to create
-  one is the row where you noticed the wrong category. That popover, hanging off the
-  existing "why this category" affordance, is Phase 2.
 
 ### Phase 3 — polish
 
@@ -45,6 +35,19 @@ Confetti, achievement badges, a "productivity score", drag-and-drop category ass
 These are decoration on a product whose entire value is being trusted with destructive
 actions. Adding celebration animation to a tool whose job is to make people feel *relief*
 rather than judged would also work against the copy rules in DESIGN.md.
+
+### Deferred out of Phase 2
+
+- **Saving a session from a hand-picked selection.** Sessions can be saved from the whole
+  set or from the current filter, but not from twelve rows ticked by hand. That needs the
+  register's selection state lifted out of the Dashboard, which is a refactor rather than a
+  Sessions change.
+- **Sessions do not restore tab groups.** Only url, title and pinned state are stored, so a
+  restored session comes back ungrouped. Undo restores groups because it snapshots them;
+  the session schema predates that decision and changing its shape now needs a migration.
+- **Recategorise from the register** — overrides can be added and edited in Settings, but
+  the natural place to create one is the row where you noticed the wrong category. That
+  popover hangs off the existing "why this category" affordance.
 
 ## Known limitations
 

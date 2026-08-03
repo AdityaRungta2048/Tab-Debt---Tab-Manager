@@ -17,8 +17,9 @@ relief.
 **Popup — the triage surface.** Search focused on open, the balance and its breakdown, and
 the top three highest-leverage actions, each one click with an undo toast.
 
-**Dashboard — everything else.** A dense, virtualised register of every tab, a duplicates
-review, and a permanent undo history.
+**Dashboard — everything else.** A dense, virtualised register of every tab, collapsible
+per-site rows, composable filters, a duplicates review, named sessions, and a permanent undo
+history.
 
 ### The Balance Bar
 
@@ -51,6 +52,15 @@ BALANCE                                              Overdue
   it cannot restore: scroll position, form contents, page history.
 - **Search** at under 16ms per keystroke on 800 tabs. Arrows navigate, Enter switches to the
   tab and focuses its window, Cmd/Ctrl+Enter closes it, Esc clears.
+- **Composable filters** — nine quick filters plus category and window. They AND together to
+  narrow, but multiple picks *within* one dimension OR, because a tab cannot be two
+  categories at once. Every active filter is always visible and individually removable, so an
+  empty register is never a mystery.
+- **Per-site rollup** that composes with the filters: "GitHub tabs untouched for a month"
+  becomes one row, with counts, staleness and size in aligned columns, and one button.
+- **Named sessions** — save the whole set or just what the current filter shows, restore into
+  a *new* window so nothing you are looking at moves, rename, delete, export and import as
+  JSON. Restoring a large session asks first.
 
 ## Privacy
 
@@ -93,9 +103,9 @@ npm run verify   # typecheck → lint → tests + coverage → build → budgets
 ```
 tsc            zero errors
 eslint         zero errors, zero warnings
-vitest         333 passed
-coverage       statements 99.48% · branches 96.45% · functions 100%   (src/core/)
-budgets        popup 39.5/120 KB gzipped · dashboard 42.7/220 · options 26.7/160 · worker 22.0/100
+vitest         402 passed
+coverage       statements 99.55% · branches 96.59% · functions 100%   (src/core/)
+budgets        popup 39.6/120 KB gzipped · dashboard 47.1/220 · options 27.5/160 · worker 22.0/100
 privacy        no network capability in 13 bundled files
 a11y           keyboard, focus, labels, reduced-motion, WCAG AA in both themes
 ```

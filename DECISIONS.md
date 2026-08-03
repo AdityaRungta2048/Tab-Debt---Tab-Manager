@@ -155,3 +155,57 @@ one that mattered — it flags stale and never-opened tabs, so the most importan
 the register was its least legible element. Values are now solved against `--card`,
 `--paper` and all three tinted state bands, worst case binding, and verified on rendered
 text in both themes by `scripts/check-a11y.mjs`.
+
+---
+
+## Phase 2
+
+### D-015 — Filters AND across dimensions, OR within one.
+
+"Stale + Pinned" means stale **and** pinned: narrowing, which is what a filter is for and
+what the brief specifies. But picking two categories means **either** of them, because a tab
+cannot be two categories at once and ANDing there would return nothing, every time, for
+every user who tried it.
+
+The rule is therefore per-dimension rather than global. Both halves are asserted by test,
+including the property that composing any two quick filters never returns more than either
+alone.
+
+### D-016 — Named sessions are ours; `chrome.sessions` is not used for them.
+
+`chrome.sessions` is a recently-closed list, not a named-session store: it cannot hold an
+arbitrary user-named set indefinitely, and its entries expire. Named sessions are therefore
+serialised to `storage.local` under the versioned, Zod-validated `td.sessions.v1` schema
+that has been in the migration path since day one. The permission is still requested and
+used for its actual purpose — surfacing tabs closed outside Tab Debt.
+
+Restore always opens a **new window**, so restoring never rearranges what the user is
+currently looking at, and is best-effort per tab: a session saved months ago may contain a
+URL Chrome now refuses, and losing 199 tabs to one bad entry would be absurd.
+
+Import re-keys colliding ids rather than dropping them. Importing an export onto the same
+install would otherwise silently lose a session, which is the opposite of what "import"
+promises.
+
+### D-017 — The `danger` variant is reserved, like the state colours.
+
+Phase 2's first draft gave every domain row a red "Bookmark & close N" button, so a viewport
+showed 26 of them. Repeated that often, red stops meaning danger, and the destructive action
+becomes the most prominent thing in a product whose thesis is relief rather than fear.
+
+It was also miscommunicating: bookmark-and-close saves every tab first and closes nothing at
+all if a single save fails, so it is the *safe* variant. `danger` is now spent only where a
+single red button appears in a view — the raw "Close N" in duplicates and in the selection
+bar. Same discipline as the state colours, applied to buttons.
+
+### D-018 — Every Phase 2 view consumes the FILTERED list.
+
+Filters feed the register, the domain rollup, bulk selection and session saving alike, from
+one `visibleTabs` memo. That is what turns two features into one: "GitHub tabs untouched for
+a month" becomes a single domain row with a single button, and "save what I'm looking at"
+means what it says.
+
+Two consequences worth stating. Select-all selects the visible set, not the hidden one — a
+select-all that silently includes 700 filtered-out tabs would be a data-loss bug waiting to
+happen. And clicking a Balance Bar segment clears the filters first, because selecting tabs
+the active filter is hiding would look like the remedy did nothing.

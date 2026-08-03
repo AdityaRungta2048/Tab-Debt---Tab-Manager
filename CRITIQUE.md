@@ -95,3 +95,58 @@ rendered text in both themes now passes AA. DESIGN.md is updated with the real v
   less faithful; leaving it.
 - **The 280px rail wraps suggestion copy badly at three lines.** Legible, not elegant.
   Tightening it is Phase 2 work alongside the filters that share the rail.
+
+---
+
+## Phase 2
+
+Written after opening the new Domains, Sessions and filtered views against the 800-tab
+fixture at 1440×900.
+
+### 6. The domain view was a wall of 26 identical red buttons — FIXED
+
+The single worst thing about Phase 2 on first look. Every domain row carried a
+`variant="danger"` "Bookmark & close N" button, so a full viewport showed **26 red
+destructive buttons stacked in a column**.
+
+Three things wrong with that at once. It spends the state colour — which DESIGN.md reserves
+exclusively for the debt score — as the default decoration of a list. It makes the
+destructive action the most visually prominent element of every row, in a product whose
+whole emotional thesis is relief rather than fear. And repeated 26 times, "danger" stops
+signalling danger at all, so the one place a red button *should* stop someone gets no more
+attention than the other 25.
+
+**Fixed.** Row actions are now quiet. That is also the honest reading: bookmark-and-close
+saves every tab before closing it and refuses to close anything if a single save fails, so
+it is the *safe* variant, and dressing it as a hazard was miscommunicating what it does. The
+`danger` variant is now reserved for genuinely unrecoverable-feeling moments — the raw
+"Close N" in the duplicates panel and the selection bar — where it appears once.
+
+### 7. The domain view abandoned the layout thesis the register follows — FIXED
+
+Each row read: `github.com  92 tabs, 89 untouched for a week or more, 10 never opened`.
+
+Because the fixture skews old, that sentence is nearly identical on all 26 rows. The
+repeated 26-character phrase "untouched for a week or more" dominated, while the numbers
+that actually differ — 92 vs 58 vs 56 — sat buried mid-sentence in the text face, at three
+different horizontal positions per row. Vertical scanning, the entire reason this product
+is laid out as a statement, was impossible.
+
+It is also inconsistent on its own terms: the register two tabs away puts every number in
+the numeric face in a fixed right-aligned column, and DESIGN.md states that as a rule.
+
+**Fixed.** The domain view now has real column headers (`Tabs · Stale · Never · Size`) with
+values right-aligned in the numeric face, so the piles sort visually down the page. The
+dominant category — already computed by the rollup and previously unused by the UI — now
+occupies the space the prose was wasting.
+
+### Not fixed, recorded instead
+
+- **Sessions are saved from the current filter or the whole set, but not from an arbitrary
+  hand-picked selection.** Selecting 12 rows in the register and saving exactly those is a
+  natural expectation the panel does not meet. It needs the selection state lifted, which is
+  a Dashboard refactor rather than a Sessions change. In ROADMAP.md.
+- **Restoring a session cannot restore tab groups.** Only url, title and pinned state are
+  stored, so a restored session comes back ungrouped. Undo restores groups because it
+  snapshots them; sessions predate that decision in the schema, and changing the shape now
+  would need a migration. Recorded rather than silently accepted.

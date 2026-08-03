@@ -24,9 +24,9 @@ Current state:
 ```
 tsc            zero errors
 eslint         zero errors, zero warnings
-vitest         333 passed
-coverage       statements 99.48% · branches 96.45% · functions 100% · lines 99.48%
-budgets        popup 39.5/120 KB · dashboard 42.7/220 · options 26.7/160 · worker 22.0/100
+vitest         402 passed
+coverage       statements 99.55% · branches 96.59% · functions 100% · lines 99.55%
+budgets        popup 39.6/120 KB · dashboard 47.1/220 · options 27.5/160 · worker 22.0/100
 privacy        no network capability in 13 bundled files
 a11y           7/7 checks pass, both themes
 ```
@@ -80,9 +80,9 @@ npm run dev:mock &
 npm run screenshot        # writes to the scratchpad shots/ directory
 ```
 
-Captures the dashboard at 800 and 50 tabs, light and dark, plus the duplicates panel, an
-active search, and a multi-row selection. This is how `CRITIQUE.md` was written — from
-looking at the rendered product, not from imagining it.
+Captures the dashboard at 800 tabs in light and dark, plus the domains, sessions and
+duplicates views and a composed two-filter state. This is how `CRITIQUE.md` was written —
+from looking at the rendered product, not from imagining it.
 
 ## Manual QA checklist
 
@@ -120,6 +120,21 @@ profile with real tabs and **cannot be run in a headless CI container**:
 - [ ] Select tabs → Close → toast → Undo restores them to the right windows and groups
 - [ ] History panel undoes an operation from several minutes ago
 - [ ] Bookmark-and-close writes into `Other bookmarks / Tab Debt / YYYY-MM-DD / <label>`
+
+### Filters, domains and sessions
+
+- [ ] Two quick filters compose: "Stale" + "Never opened" shows fewer tabs than either alone
+- [ ] The active-filter bar shows a chip per filter and an accurate "N of M tabs" count
+- [ ] Removing one chip widens the result; "Clear" resets everything
+- [ ] Filters narrow the Domains view too, not just the register
+- [ ] Select-all with a filter active selects only the visible tabs, never the hidden ones
+- [ ] Clicking a Balance Bar segment clears the filters before selecting
+- [ ] A domain row expands to its tabs; "Group N" makes a named, collapsed tab group
+- [ ] Save a session, close those tabs, restore it — a **new window** opens with them in it
+- [ ] Restoring a 200+ tab session asks for confirmation first
+- [ ] Rename a session by editing its name and clicking away; it persists across a reload
+- [ ] Export sessions to JSON, delete them all, import the file back — all return
+- [ ] Importing a non-Tab-Debt JSON file explains the problem and changes nothing
 
 ### Service worker
 

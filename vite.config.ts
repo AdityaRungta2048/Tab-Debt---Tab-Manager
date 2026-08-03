@@ -23,13 +23,20 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     target: 'esnext',
+    // Vite's modulepreload polyfill injects a real fetch() to warm <link modulepreload>.
+    // Chrome supports modulepreload natively, so in an extension it is both dead weight
+    // and a violation of the no-network guarantee — scripts/check-no-network.mjs catches
+    // it if this is ever turned back on. See PRIVACY.md.
+    modulePreload: { polyfill: false },
     // Budgets are enforced by scripts/check-bundle-size.mjs, not by warnings nobody reads.
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
+      // The dashboard is opened by URL rather than declared in the manifest, so crxjs does
+      // not discover it. Without this input it simply is not built.
       input:
         mode === 'mock'
           ? { dashboard: resolve(__dirname, 'index.html') }
-          : undefined,
+          : { dashboard: resolve(__dirname, 'src/pages/dashboard/index.html') },
     },
   },
   server: { port: 5173 },

@@ -175,10 +175,18 @@ export function createMockChrome(size = 400, seed = 42) {
       getAll: async (): Promise<{ id: number }[]> =>
         [...new Set(tabs.map((t) => t.windowId))].map((id) => ({ id })),
       getCurrent: async (): Promise<{ id: number }> => ({ id: 100 }),
-      create: async (props: { url?: string[] }): Promise<{ id: number }> => {
-        const id = 100 + [...new Set(tabs.map((t) => t.windowId))].length;
-        for (const url of props.url ?? []) await api.tabs.create({ url, windowId: id });
-        return { id };
+      // Mirrors the real API: `url` accepts a string or an array, and the returned window
+      // carries the tabs it created — sessions restore relies on that to pin the first tab.
+      create: async (props: {
+        url?: string | string[];
+        focused?: boolean;
+      }): Promise<{ id: number; tabs: FixtureTab[] }> => {
+        const existing = [...new Set(tabs.map((t) => t.windowId))];
+        const id = Math.max(100, ...existing) + 1;
+        const urls = props.url === undefined ? [] : Array.isArray(props.url) ? props.url : [props.url];
+        const created: FixtureTab[] = [];
+        for (const url of urls) created.push(await api.tabs.create({ url, windowId: id }));
+        return { id, tabs: created };
       },
       update: async (): Promise<void> => {},
     },

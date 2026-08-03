@@ -56,6 +56,25 @@ export function formatAge(tab: Pick<TabSnapshot, 'lastActiveAt' | 'lastActiveInf
   return tab.lastActiveInferred ? `${base} (estimated)` : base;
 }
 
+/**
+ * Compact form for the register, where this string appears 800 times in an 80px column.
+ *
+ * On first run EVERY record is inferred, so spelling out "(estimated)" per row wrapped the
+ * cell and broke the 28px rhythm the whole design rests on — the caveat stopped reading as
+ * honesty and started reading as noise. A leading `~` carries the same meaning in one
+ * character; the column header and a per-cell tooltip carry the full explanation, and
+ * screen readers still receive the word in full.
+ */
+export function formatAgeCompact(
+  tab: Pick<TabSnapshot, 'lastActiveAt' | 'lastActiveInferred'>,
+  now: number,
+): string {
+  const age = ageMs(tab, now);
+  if (age === null) return 'Never opened';
+  const base = formatDuration(age);
+  return tab.lastActiveInferred ? `~${base}` : base;
+}
+
 export function formatDuration(ms: number): string {
   const mins = Math.floor(ms / 60_000);
   if (mins < 1) return 'Just now';

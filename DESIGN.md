@@ -37,7 +37,14 @@ system preference by default with a manual override.
 | `--card` | `#FFFFFF` | `#1C222D` | Register ground, one step off `--paper`. |
 | `--rule` | `#D3D8E0` | `#2A313D` | Hairlines. The only separator in the product. |
 | `--ledger` | `#2D4B7C` | `#7FA3DC` | The quiet brand. Interactive, focus rings, links. Deep statement-ink blue. |
-| `--state-*` | `#2F7D5B` / `#B07A16` / `#B23A48` | `#4FBE8B` / `#E0A93C` / `#E0697A` | Green / amber / red. **Printed-ink saturation, not neon.** Reserved exclusively for score state. |
+| `--state-*` | `#26674B` / `#7A5200` / `#A5323F` | `#4FBE8B` / `#E0A93C` / `#E0697A` | Green / amber / red. **Printed-ink saturation, not neon.** Reserved exclusively for score state. |
+
+Every value above is **solved for WCAG AA against every ground it actually lands on**, not
+just against white — a token can sit on `--card`, `--paper`, or any of the three tinted
+state bands, and the binding constraint is the worst of those. My first pass picked colours
+by eye and three of them failed: `--ink-faint` at 2.44:1, `--state-warn` at 2.96:1 and
+`--state-good` at 3.98:1. The audit in `a11y.mjs` measures rendered text in the real
+browser in both themes and fails the pass, which is the only reason those were caught.
 
 The state colors are spent only on the score and its factor bar. Nothing else in the
 product is allowed green, amber, or red except destructive-confirm text. That is the

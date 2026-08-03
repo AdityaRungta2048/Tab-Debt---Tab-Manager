@@ -35,8 +35,17 @@ async function readRaw(key: string): Promise<unknown> {
 /**
  * Validate, or fall back to the schema's own defaults. A corrupt or older-shaped record
  * must degrade to a working empty state, never throw into a UI render.
+ *
+ * Generic over the SCHEMA, not over its type. Writing `z.ZodType<T>` makes TypeScript
+ * unify T with the schema's *input* type, so every field carrying a .default() would come
+ * back optional and the call sites would not typecheck.
  */
-function parseOr<T>(schema: z.ZodType<T>, raw: unknown, fallback: () => T, key: string): T {
+function parseOr<S extends z.ZodTypeAny>(
+  schema: S,
+  raw: unknown,
+  fallback: () => z.output<S>,
+  key: string,
+): z.output<S> {
   if (raw === undefined) return fallback();
   const result = schema.safeParse(raw);
   if (result.success) return result.data;

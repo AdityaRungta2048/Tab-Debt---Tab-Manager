@@ -71,8 +71,9 @@ describe('fixture generator', () => {
     const planted = f.tabs.filter((t) => t.title === 'Dashboard' && t.url.startsWith('https://example.org/'));
     expect(planted.length).toBe(2);
     expect(new Set(planted.map((t) => t.url)).size).toBe(2);
-    // non-Latin titles
-    expect(f.tabs.some((t) => /[　-鿿Ѐ-ӿ؀-ۿ]/.test(t.title))).toBe(true);
+    // Non-Latin titles. Written as escapes rather than literals so the pattern itself
+    // does not smuggle an ideographic space into the source.
+    expect(f.tabs.some((t) => /[\u3000-\u9fff\u0400-\u04ff\u0600-\u06ff]/u.test(t.title))).toBe(true);
   });
 });
 

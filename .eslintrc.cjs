@@ -70,7 +70,14 @@ module.exports = {
     },
     {
       files: ['src/**/*.test.ts', 'src/**/*.test.tsx', 'src/test/**/*.ts'],
-      rules: { 'max-lines': 'off', '@typescript-eslint/no-explicit-any': 'off' },
+      rules: {
+        'max-lines': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
+        // Service tests must import their subject AFTER the chrome mock is installed on
+        // globalThis, so `typeof import('./x')` annotations on dynamic imports are the
+        // correct pattern here rather than a style slip.
+        '@typescript-eslint/consistent-type-imports': 'off',
+      },
     },
   ],
 };

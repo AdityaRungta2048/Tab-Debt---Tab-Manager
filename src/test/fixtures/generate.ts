@@ -14,8 +14,11 @@ export type FixtureTab = {
   discarded: boolean;
   active: boolean;
   groupId: number;
-  favIconUrl?: string;
-  lastAccessed?: number;
+  favIconUrl?: string | undefined;
+  // Explicitly `| undefined`: under exactOptionalPropertyTypes, "absent" and "present but
+  // undefined" are different types, and the generator deliberately produces the latter to
+  // model a never-activated tab.
+  lastAccessed?: number | undefined;
 };
 
 export type Fixture = {

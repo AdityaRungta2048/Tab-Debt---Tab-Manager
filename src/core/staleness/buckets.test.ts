@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { bucketFor, summarise, formatAge, formatDuration, bucketLabel, BUCKET_ORDER } from './buckets';
+import { bucketFor, summarise, formatAge, formatAgeCompact, formatDuration, bucketLabel, BUCKET_ORDER } from './buckets';
 import type { TabSnapshot } from '@/types/tab';
 
 const DAY = 86_400_000;
@@ -108,5 +108,35 @@ describe('bucketLabel', () => {
     expect(bucketLabel('3days')).toBe('2–6 days');
     expect(bucketLabel('7days')).toBe('1–4 weeks');
     expect(bucketLabel('30days')).toBe('30+ days');
+  });
+});
+
+/**
+ * Regression for CRITIQUE #2: on first run every record is inferred, so spelling out
+ * "(estimated)" per row wrapped the register cell and broke the 28px rhythm.
+ */
+describe('formatAgeCompact', () => {
+  it('marks an inferred age with a leading ~ instead of a parenthetical', () => {
+    expect(formatAgeCompact(tab(NOW - 37 * DAY, true), NOW)).toBe('~1mo ago');
+  });
+
+  it('leaves an observed age unmarked', () => {
+    expect(formatAgeCompact(tab(NOW - 37 * DAY, false), NOW)).toBe('1mo ago');
+  });
+
+  it('never claims an age for a never-opened tab', () => {
+    expect(formatAgeCompact(tab(null, true), NOW)).toBe('Never opened');
+  });
+
+  it('stays short enough not to wrap an 80px column', () => {
+    for (const age of [0, DAY, 5 * DAY, 45 * DAY, 400 * DAY]) {
+      expect(formatAgeCompact(tab(NOW - age, true), NOW).length).toBeLessThanOrEqual(10);
+    }
+  });
+
+  it('still conveys uncertainty: the full form remains available for tooltips and labels', () => {
+    const t = tab(NOW - 37 * DAY, true);
+    expect(formatAge(t, NOW)).toContain('(estimated)');
+    expect(formatAgeCompact(t, NOW)).not.toContain('(estimated)');
   });
 });

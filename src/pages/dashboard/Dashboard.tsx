@@ -9,6 +9,16 @@ import { Register } from '@/components/dashboard/Register';
 import { DuplicatesPanel } from '@/components/dashboard/DuplicatesPanel';
 import { HistoryPanel } from '@/components/dashboard/HistoryPanel';
 import { SearchBox } from '@/components/popup/SearchBox';
+import { FilterBar } from '@/components/dashboard/FilterBar';
+import { DomainView } from '@/components/dashboard/DomainView';
+import { SessionsPanel } from '@/components/dashboard/SessionsPanel';
+import {
+  applyFilters,
+  isEmpty as noFilters,
+  EMPTY_FILTERS,
+  type FilterState,
+} from '@/core/filters/filters';
+import { findDuplicates } from '@/core/duplicates/cluster';
 import { executeAction } from '@/services/actions.service';
 import { recordCleanup } from '@/background/snapshot';
 import { summarise } from '@/core/staleness/buckets';
@@ -16,7 +26,7 @@ import { estimateTotalMb } from '@/core/memory/estimate';
 import type { ScoreFactorId, Suggestion } from '@/types/suggestion';
 import { FixtureSwitcher } from './FixtureSwitcher';
 
-type Tab = 'register' | 'duplicates' | 'history';
+type Tab = 'register' | 'domains' | 'duplicates' | 'sessions' | 'history';
 
 /**
  * The dashboard: account summary on the left, register on the right. The left rail is the
@@ -28,7 +38,34 @@ export function Dashboard() {
   const [panel, setPanel] = useState<Tab>('register');
   const [selected, setSelected] = useState<Set<number>>(new Set());
   const [busy, setBusy] = useState(false);
+  const [filters, setFilters] = useState<FilterState>(EMPTY_FILTERS);
   const lastToggled = useRef<number | null>(null);
+
+  // Duplicate ids are needed by the "Duplicates" quick filter and are expensive enough at
+  // 800 tabs to be worth memoising on the snapshot rather than recomputing per keystroke.
+  const duplicateIds = useMemo(
+    () =>
+      new Set(
+        findDuplicates(debt.input.tabs, {
+          ...(debt.settings.trackingParams.length
+            ? { trackingParams: debt.settings.trackingParams }
+            : {}),
+        }).flatMap((c) => c.close.map((t) => t.id)),
+      ),
+    [debt.input.tabs, debt.settings.trackingParams],
+  );
+
+  const filterCtx = useMemo(
+    () => ({ now: debt.input.now, duplicateIds, categoryOf: debt.categoryOf }),
+    [debt.input.now, duplicateIds, debt.categoryOf],
+  );
+
+  // Every view below works off the FILTERED list, so filters compose with domain rollup,
+  // bulk selection and session saving rather than only narrowing the register.
+  const visibleTabs = useMemo(
+    () => applyFilters(debt.input.tabs, filters, filterCtx),
+    [debt.input.tabs, filters, filterCtx],
+  );
 
   const stale = useMemo(() => summarise(debt.input.tabs, debt.input.now), [debt.input]);
   const totalMb = useMemo(
@@ -59,7 +96,7 @@ export function Dashboard() {
     (id: number, shiftKey: boolean) => {
       setSelected((prev) => {
         const next = new Set(prev);
-        const ids = debt.input.tabs.map((t) => t.id);
+        const ids = visibleTabs.map((t) => t.id);
         if (shiftKey && lastToggled.current !== null) {
           const from = ids.indexOf(lastToggled.current);
           const to = ids.indexOf(id);
@@ -74,14 +111,14 @@ export function Dashboard() {
         return next;
       });
     },
-    [debt.input.tabs],
+    [visibleTabs],
   );
 
   const toggleAll = useCallback(() => {
     setSelected((prev) =>
-      prev.size === debt.input.tabs.length ? new Set() : new Set(debt.input.tabs.map((t) => t.id)),
+      prev.size === visibleTabs.length ? new Set() : new Set(visibleTabs.map((t) => t.id)),
     );
-  }, [debt.input.tabs]);
+  }, [visibleTabs]);
 
   /** Clicking a Balance Bar segment jumps to that factor's remedy. */
   const onFactor = useCallback(
@@ -93,6 +130,9 @@ export function Dashboard() {
       const factor = debt.score.factors.find((f) => f.id === id);
       if (factor) {
         setPanel('register');
+        // Clear filters first: selecting tabs the active filter is hiding would look like
+        // the remedy silently did nothing.
+        setFilters(EMPTY_FILTERS);
         setSelected(new Set(factor.tabIds));
       }
     },
@@ -145,7 +185,7 @@ export function Dashboard() {
         <SearchBox index={debt.index} tabs={debt.input.tabs} onChanged={debt.refresh} maxResults={60} />
 
         <nav class="flex items-center gap-1 border-b border-rule px-3 py-1.5" aria-label="Views">
-          {(['register', 'duplicates', 'history'] as Tab[]).map((t) => (
+          {(['register', 'domains', 'duplicates', 'sessions', 'history'] as Tab[]).map((t) => (
             <button
               key={t}
               type="button"
@@ -179,15 +219,50 @@ export function Dashboard() {
           </div>
         )}
 
+        {(panel === 'register' || panel === 'domains') && (
+          <FilterBar
+            state={filters}
+            onChange={(next) => {
+              setFilters(next);
+              setSelected(new Set());
+            }}
+            tabs={debt.input.tabs}
+            categoryOf={debt.categoryOf}
+            matchCount={visibleTabs.length}
+            totalCount={debt.input.tabs.length}
+          />
+        )}
+
         {panel === 'register' && (
           <Register
-            tabs={debt.input.tabs}
+            tabs={visibleTabs}
             categories={debt.categories}
             weights={debt.settings.memoryWeights}
             selected={selected}
             onToggle={toggle}
             onToggleAll={toggleAll}
             now={debt.input.now}
+          />
+        )}
+        {panel === 'domains' && (
+          <DomainView
+            tabs={visibleTabs}
+            categoryOf={debt.categoryOf}
+            weights={debt.settings.memoryWeights}
+            now={debt.input.now}
+            onAction={(action) => void act(action)}
+            busy={busy}
+          />
+        )}
+        {panel === 'sessions' && (
+          <SessionsPanel
+            tabs={debt.input.tabs}
+            filteredTabs={visibleTabs}
+            filterActive={!noFilters(filters)}
+            onChanged={debt.refresh}
+            onMessage={(message, warning) =>
+              toast.show({ message, undoId: null, ...(warning ? { warning } : {}) })
+            }
           />
         )}
         {panel === 'duplicates' && (

@@ -1,0 +1,77 @@
+name: verify
+
+# The verification loop, run on every push and PR rather than when someone remembers.
+# Budgets and the no-network guarantee are only real if something enforces them.
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: [main]
+
+jobs:
+  verify:
+    name: typecheck · lint · tests · budgets · privacy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci
+
+      # Steps 1-4 of the loop, run separately so a failure names itself rather than
+      # surfacing as "npm run build exited 1".
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Tests and core coverage gate
+        run: npm run test:coverage
+
+      # `build` chains tsc → vite build → bundle budgets → privacy scan.
+      - name: Build, bundle budgets and privacy scan
+        run: npm run build
+
+      - name: Upload build output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+          retention-days: 7
+
+  accessibility:
+    name: accessibility (real browser)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci
+
+      # A separate job: the audit needs a browser and the mock dev server, and a flaky
+      # browser download should not mask a real failure in the core loop above.
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Start the mock dashboard
+        run: |
+          npm run dev:mock -- --port 5173 &
+          for i in $(seq 1 60); do
+            curl -sf -o /dev/null http://localhost:5173/ && exit 0
+            sleep 1
+          done
+          echo "mock dev server never came up"; exit 1
+
+      - name: Keyboard, focus, labels, reduced motion, WCAG AA
+        run: npm run check:a11y

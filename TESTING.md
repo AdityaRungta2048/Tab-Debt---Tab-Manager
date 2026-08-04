@@ -31,6 +31,16 @@ privacy        no network capability in 13 bundled files
 a11y           7/7 checks pass, both themes
 ```
 
+## CI
+
+`.github/workflows/verify.yml` runs the whole loop on every push and pull request:
+typecheck, lint, tests with the core coverage gate, build, bundle budgets and the privacy
+scan in one job; the real-browser accessibility audit in a second, so a flaky browser
+download cannot mask a failure in the core loop.
+
+The browser-driven scripts take `CHROMIUM_PATH` when a Chromium is already present, and
+otherwise fall back to Playwright's own bundled browser — which is what CI uses.
+
 ## The fixture switcher
 
 You cannot manually open 400 tabs, so the dashboard runs against generated fixtures in a

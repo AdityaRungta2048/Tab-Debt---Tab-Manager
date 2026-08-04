@@ -1,6 +1,11 @@
 import { chromium } from 'playwright';
+import { existsSync } from 'node:fs';
+
+const EXECUTABLE = process.env.CHROMIUM_PATH ?? '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
+const launchOptions = existsSync(EXECUTABLE) ? { executablePath: EXECUTABLE } : {};
+
 const OUT = process.env.SHOT_DIR ?? '/tmp/claude-0/-home-user-Tab-Debt-Cleaner/ef9b1e72-9314-5100-9f6b-23d32eb1520f/scratchpad/shots';
-const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
+const browser = await chromium.launch(launchOptions);
 const errors = [];
 
 async function shot(name, fixture, theme, work, extraQuery = '') {

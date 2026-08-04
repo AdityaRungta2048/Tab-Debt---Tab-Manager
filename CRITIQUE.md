@@ -150,3 +150,63 @@ occupies the space the prose was wasting.
   stored, so a restored session comes back ungrouped. Undo restores groups because it
   snapshots them; sessions predate that decision in the schema, and changing the shape now
   would need a migration. Recorded rather than silently accepted.
+
+---
+
+## Phase 3
+
+Written after rendering the Trends view against 90 days of generated history at 1440×900,
+in both themes, plus the table twin and the onboarding flow.
+
+### 8. Both line charts were flat lines in empty boxes — FIXED
+
+The first render was close to useless. Forcing a zero baseline on a series that lives
+between 740 and 800 squeezed every bit of variation into the **top 8% of the plot**: the
+tabs chart showed a straight line with a large grey area beneath it, and the caption
+claimed "Down 60 tabs over 30 days" next to a picture showing no such thing.
+
+Zero-basing is the right default and I applied it as a rule rather than a judgement. But a
+chart that is technically honest and communicates nothing is its own kind of dishonesty —
+the reader concludes there is no signal.
+
+**Fixed.** `shouldIncludeZero` zero-bases only when the data actually approaches zero
+(min ≤ 60% of max). When the axis is truncated **the area fill is dropped**, because a
+filled area implies magnitude measured from zero and would overstate the change; a
+truncated *line* with labelled gridlines does not. The cleanup drops are now plainly
+visible, which is the entire point of the chart.
+
+### 9. Fixing the axis moved the labels onto the line — FIXED
+
+Left-aligned tick labels sat underneath the plotted line. Moving them to the right edge
+traded that for a collision with the endpoint marker and the "800 today" read-out. I had
+made it worse by nudging rather than by fixing the cause.
+
+**Fixed.** A `padLeft` gutter in the geometry itself, so the plot starts after the labels
+and the hover hit-test maps through it. Fixing it in the geometry rather than the component
+means it is covered by the same unit tests as everything else, including the case where the
+pointer is inside the gutter.
+
+### 10. "Down 1 points over 30 days" — FIXED
+
+A pluralisation bug in copy, on a surface whose entire job is being believed.
+`describeTrend` now takes the singular and pluralises, with a test for the n=1 case.
+
+### Deliberately not built, though the brief lists it under Phase 3
+
+- **A stacked-area category chart.** Eight categories would need eight hues, which breaks
+  the "spend your boldness in exactly one place" rule this product has followed since
+  Phase 1, and eight-hue palettes are hard to keep distinguishable under colour-vision
+  deficiency. Rendered as **small multiples** instead: one row per category with a
+  sparkline and its current count. It scales past eight, needs no legend because every row
+  is directly labelled, and reads as the statement the rest of the product is.
+
+### Not fixed, recorded instead
+
+- **The debt-score chart is nearly flat on the generated history**, because 800 tabs
+  saturates the score near 96. That is the fixture being pathological rather than a chart
+  defect — the same chart on a 50-tab fixture has plenty of range — but it does mean the
+  score chart earns its space less well than the tabs chart for heavy users.
+- **Onboarding shows on first run of the dashboard only, not the popup.** Someone who
+  installs and clicks straight into the popup meets the product without the three screens.
+  The popup is deliberately minimal and a modal there would be worse; the trade is
+  recorded rather than pretended away.

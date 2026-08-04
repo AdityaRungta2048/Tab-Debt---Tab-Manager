@@ -18,8 +18,8 @@ relief.
 the top three highest-leverage actions, each one click with an undo toast.
 
 **Dashboard — everything else.** A dense, virtualised register of every tab, collapsible
-per-site rows, composable filters, a duplicates review, named sessions, and a permanent undo
-history.
+per-site rows, composable filters, a duplicates review, named sessions, trends over time,
+and a permanent undo history.
 
 ### The Balance Bar
 
@@ -61,6 +61,9 @@ BALANCE                                              Overdue
 - **Named sessions** — save the whole set or just what the current filter shows, restore into
   a *new* window so nothing you are looking at moves, rename, delete, export and import as
   JSON. Restoring a large session asks first.
+- **Trends** built only from per-day roll-ups: tab count and debt score over 7/30/90 days,
+  a per-category sparkline for each category, and a cleanup streak. Every chart has a table
+  twin, so no value is reachable only by hovering. CSV export for the tab list and history.
 
 ## Privacy
 
@@ -103,9 +106,9 @@ npm run verify   # typecheck → lint → tests + coverage → build → budgets
 ```
 tsc            zero errors
 eslint         zero errors, zero warnings
-vitest         402 passed
-coverage       statements 99.55% · branches 96.59% · functions 100%   (src/core/)
-budgets        popup 39.6/120 KB gzipped · dashboard 47.1/220 · options 27.5/160 · worker 22.0/100
+vitest         486 passed
+coverage       statements 99.60% · branches 96.10% · functions 100%   (src/core/)
+budgets        popup 39.8/120 KB gzipped · dashboard 51.5/220 · options 27.7/160 · worker 22.0/100
 privacy        no network capability in 13 bundled files
 a11y           keyboard, focus, labels, reduced-motion, WCAG AA in both themes
 ```

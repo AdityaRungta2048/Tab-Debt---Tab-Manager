@@ -24,9 +24,9 @@ Current state:
 ```
 tsc            zero errors
 eslint         zero errors, zero warnings
-vitest         402 passed
-coverage       statements 99.55% · branches 96.59% · functions 100% · lines 99.55%
-budgets        popup 39.6/120 KB · dashboard 47.1/220 · options 27.5/160 · worker 22.0/100
+vitest         486 passed
+coverage       statements 99.60% · branches 96.10% · functions 100% · lines 99.60%
+budgets        popup 39.8/120 KB · dashboard 51.5/220 · options 27.7/160 · worker 22.0/100
 privacy        no network capability in 13 bundled files
 a11y           7/7 checks pass, both themes
 ```
@@ -135,6 +135,19 @@ profile with real tabs and **cannot be run in a headless CI container**:
 - [ ] Rename a session by editing its name and clicking away; it persists across a reload
 - [ ] Export sessions to JSON, delete them all, import the file back — all return
 - [ ] Importing a non-Tab-Debt JSON file explains the problem and changes nothing
+
+### Trends and onboarding
+
+- [ ] Trends is empty on a fresh install and says so — it fills in as days pass
+- [ ] 7 / 30 / 90 day range scopes every chart at once, not one card
+- [ ] Hovering a line moves the crosshair and updates the read-out below it
+- [ ] "Show table" reveals every plotted value as text
+- [ ] Export tabs CSV and Export history CSV both download and open cleanly in a spreadsheet
+- [ ] A tab whose title starts with `=` exports with a leading apostrophe, not as a formula
+- [ ] Onboarding appears once on first run, is skippable at every step, and does not return
+- [ ] Setting the baseline on the third screen changes the debt score afterwards
+
+**Mock:** append `&onboarding=1` to the dev URL to replay onboarding.
 
 ### Service worker
 

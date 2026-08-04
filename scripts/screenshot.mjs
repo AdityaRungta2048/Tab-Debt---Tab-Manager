@@ -3,14 +3,14 @@ const OUT = process.env.SHOT_DIR ?? '/tmp/claude-0/-home-user-Tab-Debt-Cleaner/e
 const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
 const errors = [];
 
-async function shot(name, fixture, theme, work) {
+async function shot(name, fixture, theme, work, extraQuery = '') {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, colorScheme: theme });
   const page = await ctx.newPage();
   page.on('console', (m) => { if (m.type() === 'error' && !m.text().includes('_favicon')) errors.push(`[${name}] ${m.text()}`); });
   page.on('pageerror', (e) => errors.push(`[${name}] PAGEERROR ${e.message}`));
   const t0 = Date.now();
-  await page.goto(`http://localhost:5173/?fixture=${fixture}`, { waitUntil: 'networkidle' });
-  await page.waitForSelector('nav[aria-label="Views"]', { timeout: 15000 });
+  await page.goto(`http://localhost:5173/?fixture=${fixture}${extraQuery}`, { waitUntil: 'networkidle' });
+  await page.waitForSelector(extraQuery.includes('onboarding') ? '[role="dialog"]' : 'nav[aria-label="Views"]', { timeout: 15000 });
   const interactive = Date.now() - t0;
   if (work) await work(page);
   await page.waitForTimeout(400);
@@ -36,6 +36,14 @@ await shot('dash-800-domains-filtered', 800, 'light', async (p) => {
   await p.getByRole('button', { name: 'Stale', exact: true }).click();
   await p.waitForTimeout(300);
 });
+await shot('dash-800-trends', 800, 'light', view('trends'));
+await shot('dash-800-trends-dark', 800, 'dark', view('trends'));
+await shot('dash-800-trends-table', 800, 'light', async (p) => {
+  await view('trends')(p);
+  await p.getByRole('button', { name: 'Show table' }).click();
+  await p.waitForTimeout(300);
+});
+await shot('onboarding', 400, 'light', undefined, '&onboarding=1');
 
 console.log(errors.length ? `\nCONSOLE ERRORS:\n${errors.join('\n')}` : '\nNo console errors.');
 await browser.close();

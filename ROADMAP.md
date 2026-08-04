@@ -21,13 +21,21 @@ named sessions with save, restore into a new window, rename, delete and JSON exp
 warning before restoring a large session · settings completed with an editable heavy-domain
 multiplier table.
 
-## Not built yet
+## Shipped — Phase 3
 
-### Phase 3 — polish
+Trends over the daily roll-ups: tabs-open and debt-score curves, per-category small
+multiples, and a table twin for every chart · cleanup streak and totals · CSV export of the
+current tab list and of the history · onboarding, three screens, skippable at every step ·
+the quick-open keyboard shortcut (Ctrl/Cmd+Shift+K, shipped in the manifest since Phase 1).
 
-Analytics views over the daily aggregates (the data is being collected and pruned already,
-nothing renders it yet) · CSV export · cleanup streak · onboarding, three screens maximum
-and skippable.
+### Deferred out of Phase 3
+
+- **Onboarding is shown on first run of the dashboard, not the popup.** Someone who installs
+  and clicks straight into the popup meets the product without the three screens. A modal in
+  a 400×600 triage surface would be worse than the gap.
+- **The debt-score chart earns its space less well for heavy users**, because a very large
+  tab count saturates the score near the top of its range and the line goes flat. The tabs
+  chart carries the story in that case.
 
 ## Cut, and staying cut unless everything above is green
 

@@ -209,3 +209,65 @@ Two consequences worth stating. Select-all selects the visible set, not the hidd
 select-all that silently includes 700 filtered-out tabs would be a data-loss bug waiting to
 happen. And clicking a Balance Bar segment clears the filters first, because selecting tabs
 the active filter is hiding would look like the remedy did nothing.
+
+---
+
+## Phase 3
+
+### D-019 — The category breakdown is small multiples, not a stacked-area chart.
+
+Eight categories rendered as a stacked area or eight lines needs eight hues. That breaks
+"spend your boldness in exactly one place" — the rule this product has followed since
+Phase 1, and the reason the whole surface reads as a statement rather than a dashboard —
+and eight-hue categorical palettes are genuinely hard to keep separable under colour-vision
+deficiency.
+
+**Decision:** one row per category, each with a sparkline and its current count. It needs no
+legend (every row is directly labelled), it scales past eight categories without inventing
+a ninth hue, and it is already the table view of itself.
+
+The chart hue was checked with a palette validator rather than by eye: contrast against
+both the light and dark chart surfaces passes at ≥3:1. The categorical checks report
+out-of-scope for a lone hue, which is the correct reading — there are no adjacent pairs to
+separate when there is only one series.
+
+### D-020 — Zero-based axes are conditional, and truncation drops the area fill.
+
+Zero-basing a count is the right default and I first applied it as an unconditional rule.
+On a series living between 740 and 800 that compressed all the variation into the top 8% of
+the plot: the chart showed a flat line while its own caption said "Down 60 tabs over 30
+days". Technically honest, communicates nothing, and a reader concludes there is no signal.
+
+**Decision:** zero-base when the data approaches zero (min ≤ 60% of max), otherwise fit the
+axis to the data — **and drop the area fill whenever the axis is truncated**. A filled area
+implies magnitude measured from zero, so a truncated area overstates the change; a
+truncated line with labelled gridlines does not. The two must move together, which is why
+one predicate drives both.
+
+### D-021 — CSV export guards against formula injection.
+
+A field beginning `=`, `+`, `-`, `@`, tab or CR is prefixed with a single quote before
+quoting. Spreadsheet software executes those as formulas, and **tab titles are
+attacker-controlled** — any page can set its own title, so
+`=HYPERLINK("http://evil","click")` is a real vector rather than a theoretical one for an
+extension whose entire job is exporting page titles.
+
+The cost is that a genuinely negative number exports as `'-5`. Correct display loses to not
+executing content, deliberately.
+
+### D-022 — The mock harness seeds daily history too.
+
+The roll-up is written by an alarm that never fires in a plain browser tab, so the trends
+view would have been permanently empty under `vite dev --mode mock` — reviewable only by
+imagining it, which is the exact failure the fixture harness exists to prevent. The
+generator works backwards from the fixture's real tab count so the line ends on the number
+the rest of the dashboard is showing; a trend ending somewhere else would be its own small
+lie.
+
+### D-023 — Hero figures keep the numeric face, against the general guidance.
+
+General dataviz guidance says a large standalone figure should use proportional figures,
+because tabular digits look loose at display sizes. This product does the opposite, because
+"every number is in the numeric face" is the rule that makes the whole surface read as a
+statement, and the Balance figure has set that precedent since Phase 1. Consistency within
+one product beats a cross-system default here. Noted rather than followed silently.

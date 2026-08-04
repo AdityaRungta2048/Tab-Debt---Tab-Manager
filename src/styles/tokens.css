@@ -1,0 +1,156 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * Design tokens. See DESIGN.md for why these values and not others.
+ * Light and dark are both first-class: the system preference drives the default and a
+ * manual override wins via [data-theme] on the root.
+ */
+
+:root {
+  --ink: #151a23;
+  --ink-muted: #5a6472;
+  --ink-faint: #5f6a78;
+  --paper: #f2f4f7;
+  --card: #ffffff;
+  --rule: #d3d8e0;
+  --ledger: #2d4b7c;
+  --ledger-soft: #e4eaf4;
+
+  /* Printed-ink saturation, not neon. Reserved exclusively for score state. */
+  --state-good: #26674b;
+  --state-warn: #7a5200;
+  --state-bad: #a5323f;
+  --state-good-soft: #dcece4;
+  --state-warn-soft: #f6ecd6;
+  --state-bad-soft: #f7e0e3;
+
+  --shadow-toast: 0 8px 24px rgb(21 26 35 / 18%);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --ink: #e7ebf1;
+    --ink-muted: #98a3b3;
+    --ink-faint: #97a1b0;
+    --paper: #151a23;
+    --card: #1c222d;
+    --rule: #2a313d;
+    --ledger: #7fa3dc;
+    --ledger-soft: #232d3d;
+
+    --state-good: #4fbe8b;
+    --state-warn: #e0a93c;
+    --state-bad: #e0697a;
+    --state-good-soft: #1b2c26;
+    --state-warn-soft: #2e2718;
+    --state-bad-soft: #2f1e22;
+
+    --shadow-toast: 0 8px 24px rgb(0 0 0 / 45%);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --ink: #e7ebf1;
+  --ink-muted: #98a3b3;
+  --ink-faint: #97a1b0;
+  --paper: #151a23;
+  --card: #1c222d;
+  --rule: #2a313d;
+  --ledger: #7fa3dc;
+  --ledger-soft: #232d3d;
+
+  --state-good: #4fbe8b;
+  --state-warn: #e0a93c;
+  --state-bad: #e0697a;
+  --state-good-soft: #1b2c26;
+  --state-warn-soft: #2e2718;
+  --state-bad-soft: #2f1e22;
+
+  --shadow-toast: 0 8px 24px rgb(0 0 0 / 45%);
+  color-scheme: dark;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Every number in the product is set in the numeric face. See DESIGN.md. */
+.num {
+  font-family: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+/* Focus is always visible and always the ledger blue — never removed, never colour-only. */
+:focus-visible {
+  outline: 2px solid var(--ledger);
+  outline-offset: 1px;
+  border-radius: 2px;
+}
+
+::selection {
+  background: var(--ledger-soft);
+}
+
+/* Dense scrollbars: at 800 rows a 15px scrollbar is 2% of the viewport wasted. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--rule) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--rule);
+  border-radius: 4px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Motion is functional only, and always opt-out-able. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@keyframes td-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.td-toast {
+  animation: td-toast-in 150ms cubic-bezier(0, 0, 0.2, 1);
+  box-shadow: var(--shadow-toast);
+}
+
+/* The register: hairline rules, never boxes or shadows. */
+.td-row {
+  border-bottom: 1px solid var(--rule);
+}
+.td-row:hover {
+  background: var(--ledger-soft);
+}

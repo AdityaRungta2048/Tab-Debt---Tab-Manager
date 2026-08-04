@@ -1,0 +1,50 @@
+{
+  "name": "tab-debt",
+  "version": "1.0.0",
+  "description": "Pay down your tab debt instead of nuking everything.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build && npm run check:budget && npm run check:network",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --max-warnings=0",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css}\"",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "check:budget": "node scripts/check-bundle-size.mjs",
+    "check:network": "node scripts/check-no-network.mjs",
+    "verify": "npm run typecheck && npm run lint && npm run test:coverage && npm run build",
+    "dev:mock": "vite --mode mock",
+    "check:a11y": "node scripts/check-a11y.mjs",
+    "screenshot": "node scripts/screenshot.mjs"
+  },
+  "dependencies": {
+    "preact": "^10.24.3",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@crxjs/vite-plugin": "^2.0.0-beta.28",
+    "@preact/preset-vite": "^2.9.1",
+    "@types/chrome": "^0.0.280",
+    "@types/node": "^22.20.1",
+    "@typescript-eslint/eslint-plugin": "^8.13.0",
+    "@typescript-eslint/parser": "^8.13.0",
+    "@vitest/coverage-v8": "^2.1.4",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^8.57.1",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "gzip-size": "^7.0.0",
+    "jsdom": "^25.0.1",
+    "playwright": "^1.62.1",
+    "postcss": "^8.4.47",
+    "prettier": "^3.3.3",
+    "tailwindcss": "^3.4.14",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10",
+    "vitest": "^2.1.4"
+  }
+}

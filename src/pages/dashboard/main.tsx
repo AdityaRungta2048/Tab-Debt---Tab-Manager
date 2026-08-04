@@ -8,8 +8,25 @@ async function boot(): Promise<void> {
   // extension installed. The import is inside the guard so it never reaches the crx bundle.
   if (__MOCK__) {
     const { installMockChrome } = await import('@/test/mocks/chrome');
-    const size = Number(new URLSearchParams(location.search).get('fixture') ?? 400);
-    installMockChrome(Number.isFinite(size) ? size : 400);
+    const params = new URLSearchParams(location.search);
+    const size = Number(params.get('fixture') ?? 400);
+    const mock = installMockChrome(Number.isFinite(size) ? size : 400);
+
+    // Seed the daily roll-up too. The real one is written by an alarm that never fires in
+    // a plain browser tab, so without this the trends view could only be reviewed by
+    // imagining it — which is the exact failure the fixture harness exists to prevent.
+    const { generateHistory } = await import('@/test/fixtures/history');
+    const { KEYS, SCHEMA_VERSION } = await import('@/types/storage');
+    await mock.storage.local.set({
+      [KEYS.daily]: {
+        v: SCHEMA_VERSION,
+        rows: generateHistory(90, Date.now(), mock.__tabs().length),
+      },
+      // Onboarding is shown on demand in the harness (?onboarding=1), not on every reload.
+      ...(params.get('onboarding') === '1'
+        ? {}
+        : { [KEYS.settings]: { v: SCHEMA_VERSION, onboarded: true } }),
+    });
   }
 
   await applyStoredTheme();

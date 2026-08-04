@@ -12,6 +12,8 @@ import { SearchBox } from '@/components/popup/SearchBox';
 import { FilterBar } from '@/components/dashboard/FilterBar';
 import { DomainView } from '@/components/dashboard/DomainView';
 import { SessionsPanel } from '@/components/dashboard/SessionsPanel';
+import { TrendsPanel } from '@/components/dashboard/TrendsPanel';
+import { Onboarding } from '@/components/dashboard/Onboarding';
 import {
   applyFilters,
   isEmpty as noFilters,
@@ -26,7 +28,7 @@ import { estimateTotalMb } from '@/core/memory/estimate';
 import type { ScoreFactorId, Suggestion } from '@/types/suggestion';
 import { FixtureSwitcher } from './FixtureSwitcher';
 
-type Tab = 'register' | 'domains' | 'duplicates' | 'sessions' | 'history';
+type Tab = 'register' | 'domains' | 'duplicates' | 'sessions' | 'trends' | 'history';
 
 /**
  * The dashboard: account summary on the left, register on the right. The left rail is the
@@ -143,6 +145,12 @@ export function Dashboard() {
 
   if (debt.loading) return <Spinner label="Reading your tabs…" />;
 
+  if (!debt.settings.onboarded) {
+    return (
+      <Onboarding tabCount={debt.input.tabs.length} onDone={debt.refresh} />
+    );
+  }
+
   return (
     <div class="flex h-screen bg-paper">
       <aside class="flex w-[280px] shrink-0 flex-col overflow-y-auto border-r border-rule">
@@ -185,7 +193,7 @@ export function Dashboard() {
         <SearchBox index={debt.index} tabs={debt.input.tabs} onChanged={debt.refresh} maxResults={60} />
 
         <nav class="flex items-center gap-1 border-b border-rule px-3 py-1.5" aria-label="Views">
-          {(['register', 'domains', 'duplicates', 'sessions', 'history'] as Tab[]).map((t) => (
+          {(['register', 'domains', 'duplicates', 'sessions', 'trends', 'history'] as Tab[]).map((t) => (
             <button
               key={t}
               type="button"
@@ -272,6 +280,14 @@ export function Dashboard() {
             trackingParams={debt.settings.trackingParams}
             onClose={(tabIds) => void act({ kind: 'close', tabIds })}
             busy={busy}
+          />
+        )}
+        {panel === 'trends' && (
+          <TrendsPanel
+            tabs={debt.input.tabs}
+            categoryOf={debt.categoryOf}
+            now={debt.input.now}
+            onMessage={(message) => toast.show({ message, undoId: null })}
           />
         )}
         {panel === 'history' && <HistoryPanel onUndone={debt.refresh} />}

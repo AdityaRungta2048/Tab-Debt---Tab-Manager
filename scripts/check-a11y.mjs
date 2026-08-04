@@ -1,5 +1,10 @@
 import { chromium } from 'playwright';
-const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
+import { existsSync } from 'node:fs';
+
+const EXECUTABLE = process.env.CHROMIUM_PATH ?? '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
+const launchOptions = existsSync(EXECUTABLE) ? { executablePath: EXECUTABLE } : {};
+
+const browser = await chromium.launch(launchOptions);
 const fails = [];
 const pass = [];
 

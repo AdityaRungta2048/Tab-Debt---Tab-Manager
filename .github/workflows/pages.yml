@@ -1,8 +1,13 @@
 name: pages
 
 # Publishes docs/ to GitHub Pages: the homepage and the privacy policy the Chrome Web Store
-# listing links to. `enablement: true` turns Pages on the first time this runs, so the site
-# does not depend on someone remembering to flip a repository setting.
+# listing links to.
+#
+# One-time setup: Settings → Pages → Build and deployment → Source: **GitHub Actions**.
+# `enablement: true` below tries to do that automatically, but the workflow token is only
+# allowed to create the Pages site when the repository grants it that permission; where it
+# is not, the first run fails with "Create Pages site failed: Resource not accessible by
+# integration" and the setting has to be flipped by hand. Every run after that is automatic.
 
 on:
   push:

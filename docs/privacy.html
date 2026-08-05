@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Privacy Policy — Tab Debt</title>
+    <meta
+      name="description"
+      content="Tab Debt makes no network requests. No telemetry, no accounts, no third parties. Everything is stored locally in your own Chrome profile."
+    />
+    <link rel="icon" href="icon.svg" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="wrap">
+        <div class="lockup">
+          <img src="icon.svg" alt="" width="68" height="68" />
+          <h1>Privacy Policy</h1>
+        </div>
+        <p>
+          Tab Debt makes no network requests. Not to us, not to anyone. There is no server to send
+          your data to, because there is no server.
+        </p>
+        <ul class="links">
+          <li><a href="index.html">Tab Debt home</a></li>
+          <li><a href="https://github.com/AdityaRungta2048/Tab-Debt-Cleaner">Source on GitHub</a></li>
+        </ul>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <p class="meta">Tab Debt · Chrome extension · Last updated 2026-08-03</p>
+
+      <h2>What Tab Debt can see</h2>
+      <p>To do its job, Tab Debt reads metadata about your open tabs:</p>
+      <ul>
+        <li>Page title and address (URL)</li>
+        <li>Which window a tab is in, and its position</li>
+        <li>Whether it is pinned, playing audio, muted, or discarded by Chrome</li>
+        <li>When it was last active</li>
+        <li>Which tab group it belongs to</li>
+      </ul>
+      <p>
+        It does <strong>not</strong> read the content of any page. It has no content scripts and no
+        host permissions, so it has no ability to see what is on a page — only that the tab is open.
+      </p>
+
+      <h2>What Tab Debt stores, and where</h2>
+      <p>
+        Everything is stored in <code>chrome.storage.local</code>, which lives on your computer
+        inside your Chrome profile:
+      </p>
+      <ul>
+        <li>
+          Your settings: comfortable tab baseline, theme, category overrides, tracking-parameter
+          list, memory heuristic weights
+        </li>
+        <li>Activity records: when each open tab was last active, so staleness can be measured</li>
+        <li>Undo history: the last few bulk operations, so they can be reversed</li>
+        <li>Archived tabs: title, address, site and category for tabs you chose to archive</li>
+        <li>Saved sessions: the tabs you explicitly named and saved</li>
+        <li>
+          Daily aggregates: one row per day holding total tab count, debt score, and counts per
+          category. These are <strong>totals only</strong> — no per-tab history is retained, and
+          rows older than 180 days are deleted automatically.
+        </li>
+      </ul>
+      <p>
+        None of it is synced. <code>chrome.storage.sync</code> is not used, so nothing crosses
+        between your devices or touches Google's sync servers.
+      </p>
+
+      <h2>What Tab Debt sends</h2>
+      <p><strong>Nothing.</strong></p>
+      <ul>
+        <li>No analytics, no telemetry, no crash reporting, no usage statistics</li>
+        <li>No accounts, no sign-in, no identifiers</li>
+        <li>No remote fonts, stylesheets, scripts or images</li>
+        <li>No CDN of any kind</li>
+        <li>
+          Favicons are read from Chrome's own local cache, never fetched over the network —
+          fetching them remotely would leak your browsing history to third parties
+        </li>
+      </ul>
+      <div class="note">
+        <p>
+          This is enforced, not merely promised. A check runs on every build and
+          <strong>fails the build</strong> if <code>fetch</code>, <code>XMLHttpRequest</code>,
+          <code>WebSocket</code>, <code>EventSource</code>, <code>navigator.sendBeacon</code>,
+          <code>importScripts</code> or any remote URL appears anywhere in the shipped code. A lint
+          rule bans the same globals in source. The extension's content security policy
+          (<code>script-src 'self'</code>) blocks remote code even if something slipped through.
+        </p>
+      </div>
+
+      <h2>Third parties</h2>
+      <p>
+        There are none. No service providers, no processors, no advertisers, no partners. Your data
+        is never sold, shared, rented or disclosed, because it never leaves your machine.
+      </p>
+
+      <h2>Your control</h2>
+      <ul>
+        <li>
+          <strong>Export</strong> — Settings → "Export a copy" writes a JSON file to your computer
+          with everything Tab Debt has stored about you.
+        </li>
+        <li>
+          <strong>Delete</strong> — Settings → "Delete all data" erases all of it immediately. Your
+          tabs are not affected.
+        </li>
+        <li>
+          <strong>Uninstall</strong> — removing the extension deletes everything it stored,
+          permanently.
+        </li>
+      </ul>
+
+      <h2>Children</h2>
+      <p>
+        Tab Debt is a browser utility with no accounts, no content and no communication features. It
+        collects nothing from anyone, of any age.
+      </p>
+
+      <h2>Changes</h2>
+      <p>
+        If this policy ever changes, the change ships with a new version of the extension and this
+        page is updated in the public repository alongside it. Since the extension has no network
+        access, a policy change cannot retroactively affect data that was never transmitted.
+      </p>
+
+      <h2>Contact</h2>
+      <p>
+        Questions or concerns:
+        <a href="https://github.com/AdityaRungta2048/Tab-Debt-Cleaner/issues"
+          >open an issue on the project's GitHub repository</a
+        >.
+      </p>
+    </main>
+
+    <footer class="wrap">
+      <p>
+        The canonical copy of this policy is
+        <a href="https://github.com/AdityaRungta2048/Tab-Debt-Cleaner/blob/main/PRIVACY.md"
+          >PRIVACY.md</a
+        >
+        in the public repository. This page loads no fonts, scripts, images or trackers from
+        anywhere else — same rule as the extension.
+      </p>
+    </footer>
+  </body>
+</html>

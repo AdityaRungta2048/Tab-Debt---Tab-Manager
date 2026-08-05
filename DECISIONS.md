@@ -271,3 +271,20 @@ because tabular digits look loose at display sizes. This product does the opposi
 "every number is in the numeric face" is the rule that makes the whole surface read as a
 statement, and the Balance figure has set that precedent since Phase 1. Consistency within
 one product beats a cross-system default here. Noted rather than followed silently.
+
+### D-024 — The icons are a build output from one vector source, cut twice.
+
+The first icon was three hand-placed rectangles in a blue square, drawn once and never
+looked at again at the size it actually ships in. Two problems: nobody could edit it, and
+at 16px in the toolbar it read as noise.
+
+**Decision:** `src/assets/icon.svg` is the source, `npm run icons` renders the PNGs, and the
+mark is the Balance Bar inside a browser window — the same signature element the surfaces
+are built around, rather than a generic list glyph.
+
+The 16px size is **not** a scaled copy. Its third factor segment is 8 units wide, which
+lands on one grey pixel and reads as dirt, so the small size has its own cut: two heavier
+segments, a wider tab, a tighter corner radius. Each size is rendered vector-first at its
+target dimensions rather than downsampled from 128, which is the difference between crisp
+edges and grey ones. Reviewed at actual size on both a light and a dark toolbar before
+being accepted — the failure mode of icon work is judging it at 128px.

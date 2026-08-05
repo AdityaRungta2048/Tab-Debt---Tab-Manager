@@ -20,7 +20,8 @@
     "verify": "npm run typecheck && npm run lint && npm run test:coverage && npm run build",
     "dev:mock": "vite --mode mock",
     "check:a11y": "node scripts/check-a11y.mjs",
-    "screenshot": "node scripts/screenshot.mjs"
+    "screenshot": "node scripts/screenshot.mjs",
+    "icons": "node scripts/render-icons.mjs"
   },
   "dependencies": {
     "preact": "^10.24.3",

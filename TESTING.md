@@ -94,6 +94,17 @@ Captures the dashboard at 800 tabs in light and dark, plus the domains, sessions
 duplicates views and a composed two-filter state. This is how `CRITIQUE.md` was written —
 from looking at the rendered product, not from imagining it.
 
+## Icons
+
+```bash
+npm run icons             # re-renders src/assets/icon-{16,48,128}.png from icon.svg
+```
+
+Edit `src/assets/icon.svg`, not the PNGs. The 16px cut is defined separately in
+`scripts/render-icons.mjs` and is deliberately not a scaled copy of the 128 — see
+DECISIONS.md D-024. Judge the result at **actual size on both a light and a dark toolbar**;
+an icon that looks good at 128px tells you nothing about the size it ships in.
+
 ## Manual QA checklist
 
 Steps 1–4 and 7 of the verification loop are automated above. These require a real Chrome

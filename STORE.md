@@ -112,8 +112,8 @@ tab set with no real personal data in it.
 | 4 | The undo toast immediately after a bulk close, with the "cannot restore" line legible. | "Close 100 tabs. Change your mind." |
 | 5 | Dashboard in dark theme, search active with results. | "Instant search across 800 tabs. Light and dark." |
 
-Also supply the **128×128 store icon** (`src/assets/icon-128.png`) and, optionally, a
-1400×560 marquee.
+Also supply the **128×128 store icon** — `src/assets/icon-128.png`, rendered by
+`npm run icons` from `src/assets/icon.svg` — and, optionally, a 1400×560 marquee.
 
 Screenshot rules to respect: no browser chrome around the image, no added marketing text
 overlaying the UI beyond the caption field, and the screenshot must show the actual product.

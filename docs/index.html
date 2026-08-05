@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tab Debt — pay down your open tabs</title>
+    <meta
+      name="description"
+      content="A Chrome extension for people with 200-800 open tabs. See what they cost, pay it down one reversible step at a time. Nothing leaves your computer."
+    />
+    <link rel="icon" href="icon.svg" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="wrap">
+        <div class="lockup">
+          <img src="icon.svg" alt="" width="68" height="68" />
+          <h1>Tab Debt</h1>
+        </div>
+        <p>
+          You don't have a tab problem. You have tab debt — and a debt is something you can pay
+          down, one reversible step at a time.
+        </p>
+        <p class="sub">Nothing leaves your computer.</p>
+        <ul class="links">
+          <li><a href="privacy.html">Privacy policy</a></li>
+          <li><a href="https://github.com/AdityaRungta2048/Tab-Debt-Cleaner">Source on GitHub</a></li>
+          <li>
+            <a href="https://github.com/AdityaRungta2048/Tab-Debt-Cleaner/issues">Support</a>
+          </li>
+        </ul>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <h2>What it is</h2>
+      <p>
+        A Chrome extension (Manifest V3) for people with 200–800 open tabs. Most tab managers do
+        one of two things: list your tabs, which is useless at 400, or offer to close them all,
+        which is terrifying — so nobody does it.
+      </p>
+      <p>
+        Tab Debt treats your tabs as a balance you've accumulated. It tells you honestly what you
+        owe, shows you exactly which chunk to pay off first and what it costs, and makes paying it
+        off a single action you can undo.
+      </p>
+
+      <h2>What it does</h2>
+
+      <div class="card">
+        <h3>See what you owe</h3>
+        <p>
+          One score, 0–100, broken into the things that caused it: how many tabs are open, how many
+          are duplicates, how many you haven't touched in weeks, how many you never opened at all.
+          Every line has a one-click fix next to it.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Find the duplicates you didn't know about</h3>
+        <p>
+          Three kinds, shown separately because they are not equally safe to close: identical
+          addresses, the same page with different tracking parameters, and the same page with a
+          different search. Nothing is ever closed automatically. Pinned tabs, tabs playing audio,
+          drafts and documents that might hold unsaved work are never selected for you.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Undo everything</h3>
+        <p>
+          Close 100 tabs and change your mind. They come back — in the right windows, still pinned,
+          still grouped. Undo lives in a history panel too, not just a toast that vanishes, because
+          people notice their mistake two minutes later.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Built for real tab counts</h3>
+        <p>
+          Search responds in under 16&nbsp;ms with 800 tabs open. The list is virtualised. Light and
+          dark themes, full keyboard control, and screen-reader labels throughout.
+        </p>
+      </div>
+
+      <h2>Privacy</h2>
+      <div class="note">
+        <p>
+          <strong>Tab Debt makes no network requests at all.</strong> No accounts, no servers, no
+          analytics, no tracking, no CDN, no remote fonts, no remote favicons. Everything lives in
+          <code>chrome.storage.local</code> on your own machine.
+        </p>
+        <p>
+          This is enforced rather than promised: a check runs on every build and fails it if
+          <code>fetch</code>, <code>XMLHttpRequest</code>, <code>WebSocket</code> or any remote URL
+          appears in the shipped code. It has already caught one real violation.
+        </p>
+      </div>
+      <p>Read the full <a href="privacy.html">privacy policy</a>.</p>
+
+      <h2>Install</h2>
+      <p>
+        Requires Chrome 121 or later. Until it is on the Chrome Web Store, build it and load it
+        unpacked:
+      </p>
+      <pre><code>git clone https://github.com/AdityaRungta2048/Tab-Debt-Cleaner
+cd Tab-Debt-Cleaner
+npm install
+npm run build</code></pre>
+      <p>
+        Then open <code>chrome://extensions</code>, enable Developer mode, choose
+        <strong>Load unpacked</strong>, and select the <code>dist/</code> folder.
+      </p>
+
+      <h2>Permissions</h2>
+      <p>
+        Seven, and no host permissions or content scripts — Tab Debt cannot read the content of any
+        page, only tab metadata. Each one is justified in
+        <a href="https://github.com/AdityaRungta2048/Tab-Debt-Cleaner/blob/main/PERMISSIONS.md"
+          >PERMISSIONS.md</a
+        >, along with the list of permissions deliberately not requested and why.
+      </p>
+
+      <h2>Support</h2>
+      <p>
+        Questions, bugs and feature requests:
+        <a href="https://github.com/AdityaRungta2048/Tab-Debt-Cleaner/issues">open an issue</a>.
+      </p>
+    </main>
+
+    <footer class="wrap">
+      <p>
+        Source, documentation and issue tracker on
+        <a href="https://github.com/AdityaRungta2048/Tab-Debt-Cleaner">GitHub</a>. This page loads
+        no fonts, scripts, images or trackers from anywhere else — same rule as the extension.
+      </p>
+    </footer>
+  </body>
+</html>

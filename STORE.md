@@ -71,7 +71,7 @@ English (UK/US neutral)
 
 ### Permission justifications
 
-Copy the per-permission text verbatim from [PERMISSIONS.md](PERMISSIONS.md). All seven are
+Copy the per-permission text verbatim from [PERMISSIONS.md](PERMISSIONS.md). All six are
 written in review-form language. Summary of what to paste:
 
 | Permission | One-line justification |

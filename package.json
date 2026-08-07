@@ -1,12 +1,12 @@
 {
   "name": "tab-debt",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Pay down your tab debt instead of nuking everything.",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build && npm run check:budget && npm run check:network",
+    "build": "tsc --noEmit && vite build && npm run check:budget && npm run check:network && npm run check:permissions",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --max-warnings=0",
@@ -17,6 +17,7 @@
     "test:coverage": "vitest run --coverage",
     "check:budget": "node scripts/check-bundle-size.mjs",
     "check:network": "node scripts/check-no-network.mjs",
+    "check:permissions": "node scripts/check-permissions.mjs",
     "verify": "npm run typecheck && npm run lint && npm run test:coverage && npm run build",
     "dev:mock": "vite --mode mock",
     "check:a11y": "node scripts/check-a11y.mjs",

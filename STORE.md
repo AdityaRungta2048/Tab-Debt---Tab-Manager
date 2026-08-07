@@ -82,7 +82,10 @@ written in review-form language. Summary of what to paste:
 | `bookmarks` | "Bookmark and close" saves tabs to a dated Tab Debt folder before closing them. |
 | `favicon` | Show site icons from Chrome's local cache so users can scan hundreds of rows — never fetched over the network. |
 | `tabGroups` | Grouping is offered instead of closing, and undo restores original group membership and names. |
-| `sessions` | Read the recently-closed list to help users recover tabs closed outside Tab Debt. |
+
+There is no `sessions` row. It was requested in 1.0.0 without being used and was rejected for
+exactly that (Purple Potassium — "requesting but not using"). Every row above is called by
+shipping code; check that this stays true before each submission.
 
 ### Are you using remote code?
 **No.** All code is bundled. CSP is `script-src 'self'; object-src 'self'`.

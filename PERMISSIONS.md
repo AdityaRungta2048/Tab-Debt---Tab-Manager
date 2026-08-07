@@ -59,19 +59,13 @@ Store review form.
 > a bulk action is reversed, the extension restores the tabs' original group membership and
 > group names, which it cannot do without reading and setting group properties.
 
-### `sessions`
-
-> Used to read the browser's recently-closed list so the extension can surface tabs that
-> were closed outside of Tab Debt when a user is trying to recover something. Tab Debt's own
-> named save/restore feature is implemented in `storage.local` rather than through this API,
-> because `chrome.sessions` is a recently-closed list and not a named-session store.
-
 ---
 
 ## Deliberately not requested
 
 | Permission | Why not |
 |---|---|
+| `sessions` | Requested in 1.0.0 and removed in 1.0.1 as unused. Tab Debt's named save/restore is its own `storage.local` feature (D-016) because `chrome.sessions` is a recently-closed list, not a named-session store; the recently-closed reader that would have justified the API was never built. Nothing may re-add this permission until code actually calls `chrome.sessions`. |
 | `<all_urls>` / host permissions | Everything Tab Debt needs is tab *metadata*. Page content is never read. Requesting host access would grant the ability to read every page the user visits, for zero product benefit, and would rightly trigger a much harsher review. |
 | Content scripts | Same reason. No code is injected into any page. |
 | `history` | Tab Debt is about tabs that are open now, not pages visited in the past. |

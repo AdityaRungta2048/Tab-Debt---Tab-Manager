@@ -1,6 +1,6 @@
 # PERMISSIONS
 
-Seven permissions. No host permissions, no content scripts, no `<all_urls>`.
+Six permissions. No host permissions, no content scripts, no `<all_urls>`.
 
 Each justification below is written in the language it would be pasted into the Chrome Web
 Store review form.

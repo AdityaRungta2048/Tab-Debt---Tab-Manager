@@ -214,6 +214,28 @@ export function Options() {
           </Button>
         </div>
       </section>
+
+      <p class="mt-6 border-t border-rule pt-4 text-2xs text-muted">
+        More by AR Labs:{' '}
+        {[
+          ['Prism - Color Picker', 'fnolbffnpeamdpjepbgmlajdeakfecfb'],
+          ['Website Roast', 'khjanpephopmklcgpjjimbdnpbnknnga'],
+          ['Inbox Janitor', 'lagoddlfnhlflblgfakcenjonpkpkpmo'],
+          ['Grabbit - Web Scraper', 'eoaacdkiehhbjfebnnabbammefccioef'],
+        ].map(([name, id], i) => (
+          <span key={id}>
+            {i ? ' · ' : ''}
+            <a
+              href={`https://chromewebstore.google.com/detail/${id}`}
+              target="_blank"
+              rel="noopener"
+              class="underline underline-offset-2 hover:opacity-80"
+            >
+              {name}
+            </a>
+          </span>
+        ))}
+      </p>
     </div>
   );
 }

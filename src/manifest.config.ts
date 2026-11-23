@@ -8,9 +8,11 @@ import { defineManifest } from '@crxjs/vite-plugin';
 // the recently-closed reader that would have used the API was never built.
 export default defineManifest({
   manifest_version: 3,
-  name: 'Tab Debt - Tab Manager',
-  version: '1.0.2',
-  description: 'See what your open tabs actually cost, and pay the debt down one reversible step at a time.',
+  // Translated store name and summary: public/_locales/<lang>/messages.json.
+  name: '__MSG_appName__',
+  version: '1.1.0',
+  description: '__MSG_appDesc__',
+  default_locale: 'en',
   minimum_chrome_version: '121', // tabs.lastAccessed landed in 121 and is our staleness seed.
   permissions: ['tabs', 'storage', 'alarms', 'bookmarks', 'favicon', 'tabGroups'],
   action: {

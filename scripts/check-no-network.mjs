@@ -25,7 +25,7 @@ const FORBIDDEN = [
 const ALLOWED_STRINGS = [
   'http://www.w3.org/', // SVG/XML namespaces
   'https://www.w3.org/',
-  'https://claude.ai/', // attribution only, never fetched
+  'https://chromewebstore.google.com/detail/', // links the user can click, never fetched
 ];
 
 async function* walk(dir) {

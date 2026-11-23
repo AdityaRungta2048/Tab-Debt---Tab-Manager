@@ -1,0 +1,10 @@
+{
+  "appName": {
+    "message": "Tab Debt - Tab Manager & Duplicate Tab Cleaner",
+    "description": "Extension name in Chrome and the Web Store (max 75 chars)."
+  },
+  "appDesc": {
+    "message": "Find duplicate and forgotten tabs, see what your open tabs cost, and close them in safe, undoable steps. Nothing leaves your device.",
+    "description": "Web Store summary (max 132 chars)."
+  }
+}

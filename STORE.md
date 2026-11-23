@@ -8,13 +8,14 @@ that specifically catch tab managers and how this build already avoids each.
 ## Listing copy
 
 ### Name
-`Tab Debt`
+`Tab Debt - Tab Manager & Duplicate Tab Cleaner`
 
 ### Short description (132 char max)
-> See what your open tabs actually cost, and pay the debt down one reversible step at a time.
-> Nothing leaves your computer.
+> Find duplicate and forgotten tabs, see what your open tabs cost, and close them in safe,
+> undoable steps. Nothing leaves your device.
 
-*(126 characters.)*
+*(132 characters. Since 1.1.0 the name and summary come from `public/_locales/<lang>/messages.json`,
+translated into 13 languages; the store reads them from the uploaded zip.)*
 
 ### Detailed description
 

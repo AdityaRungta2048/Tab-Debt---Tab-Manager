@@ -10,7 +10,7 @@ export default defineManifest({
   manifest_version: 3,
   // Translated store name and summary: public/_locales/<lang>/messages.json.
   name: '__MSG_appName__',
-  version: '1.1.0',
+  version: '1.1.1',
   description: '__MSG_appDesc__',
   default_locale: 'en',
   minimum_chrome_version: '121', // tabs.lastAccessed landed in 121 and is our staleness seed.

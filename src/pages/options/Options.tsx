@@ -216,7 +216,15 @@ export function Options() {
       </section>
 
       <p class="mt-6 border-t border-rule pt-4 text-2xs text-muted">
-        More by AR Labs:{' '}
+        <a
+          href="https://chromewebstore.google.com/detail/lhblgcjhbejkkfedmbpmpflglidlkppg/reviews"
+          target="_blank"
+          rel="noopener"
+          class="underline underline-offset-2 hover:opacity-80"
+        >
+          Rate Tab Debt
+        </a>
+        {' · '}More by AR Labs:{' '}
         {[
           ['Prism - Color Picker', 'fnolbffnpeamdpjepbgmlajdeakfecfb'],
           ['Website Roast', 'khjanpephopmklcgpjjimbdnpbnknnga'],

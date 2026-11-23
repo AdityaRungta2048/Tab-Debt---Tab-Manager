@@ -1,5 +1,7 @@
 # Tab Debt
 
+**[Add Tab Debt to Chrome](https://chromewebstore.google.com/detail/lhblgcjhbejkkfedmbpmpflglidlkppg)** (free)
+
 A Chrome extension (Manifest V3) for people with 200–800 open tabs.
 
 Existing tab managers either list your tabs — useless at 400 — or offer to close them in

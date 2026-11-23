@@ -58,7 +58,15 @@ export function Popup() {
             </h2>
             {top.length === 0 ? (
               <Empty title="Nothing worth doing right now.">
-                No group of three or more tabs stands out. Your debt is under control.
+                No group of three or more tabs stands out. Your debt is under control.{' '}
+                <a
+                  href="https://chromewebstore.google.com/detail/lhblgcjhbejkkfedmbpmpflglidlkppg/reviews"
+                  target="_blank"
+                  rel="noopener"
+                  class="underline underline-offset-2 hover:opacity-80"
+                >
+                  Rate Tab Debt
+                </a>
               </Empty>
             ) : (
               top.map((s) => (

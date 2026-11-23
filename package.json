@@ -1,6 +1,6 @@
 {
   "name": "tab-debt",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Pay down your tab debt instead of nuking everything.",
   "private": true,
   "type": "module",
